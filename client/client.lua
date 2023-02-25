@@ -3,13 +3,19 @@ local display = false
 
 RegisterNUICallback('items', function(data, cb)
     local itemList = {}
+    local invenimage
     for k, v in pairs(Config.CraftingLocations[data.location].items) do
+        if Config.ox_inventory then
+            invenimage = Config.Inventory .. "/web/images/" .. k .. ".png"
+        else
+            invenimage = Config.Inventory .. "/html/images/" .. QBCore.Shared.Items[k].image
+        end
         if Config.UsingSkills then
             exports['mz-skills']:CheckSkill("Crafting", v.skillRequired, function(hasskill)
                 if hasskill then
                     itemList[#itemList + 1] = {
                         name = v.name,
-                        image = Config.Inventory .. "/html/images/" .. QBCore.Shared.Items[k].image,
+                        image = invenimage,
                         itemWeight = tonumber(QBCore.Shared.Items[k].weight) / 1000,
                         craftableAmount = v.amount,
                         itemsNeededToCraft = v.materialsNeeded,
@@ -21,7 +27,7 @@ RegisterNUICallback('items', function(data, cb)
         else
             itemList[#itemList + 1] = {
                 name = v.name,
-                image = Config.Inventory .. "/html/images/" .. QBCore.Shared.Items[k].image,
+                image = invenimage,
                 itemWeight = tonumber(QBCore.Shared.Items[k].weight) / 1000,
                 craftableAmount = v.amount,
                 itemsNeededToCraft = v.materialsNeeded,

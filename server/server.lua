@@ -24,8 +24,9 @@ RegisterNetEvent('qw-crafting:server:craftItem', function(item, location, amount
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v.item], 'remove', v.amount * amount)
     end
 
-    Player.Functions.AddItem(item, itemData.amount * amount)
-    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], "add", itemData.amount * amount)
+    if exports.ox_inventory:CanCarryItem(src, item, itemData.amount * amount) then
+        exports.ox_inventory:AddItem(src, item, itemData.amount * amount)
+    end
 
     if Config.DiscordLog.active then
         local discordData = {
@@ -39,6 +40,7 @@ RegisterNetEvent('qw-crafting:server:craftItem', function(item, location, amount
         }
         PerformHttpRequest(Config.DiscordLog.webhook, function(err, text, headers) end, 'POST', json.encode({username = Config.DiscordLog.username, embeds = {discordData}, avatar_url = Config.DiscordLog.image}), { ['Content-Type'] = 'application/json' })
     end
+    lib.logger(src, 'Crafting', ('"%s" Crafted "%s". Amount = "%s"'):format(GetPlayerName(src), itemData.name, itemData.amount))
 end)
 
 
@@ -48,14 +50,26 @@ QBCore.Functions.CreateCallback('qw-crafting:server:enoughMaterials', function(s
     local idk = 0
     local player = QBCore.Functions.GetPlayer(source)
     for k, v in pairs(materials) do
-        if player.Functions.GetItemByName(v.item) and player.Functions.GetItemByName(v.item).amount >= v.amount * amountToCraft then
-            idk = idk + 1
-            if idk == #materials then
-                cb(true)
+        if Config.ox_inventory then
+            if exports.ox_inventory:GetItem(src, v.item) and exports.ox_inventory:GetItem(src, v.item).count >= v.amount * amountToCraft then
+                idk = idk + 1
+                if idk == #materials then
+                    cb(true)
+                end
+            else
+                cb(false)
+                return
             end
         else
-            cb(false)
-            return
+            if player.Functions.GetItemByName(v.item) and player.Functions.GetItemByName(v.item).amount >= v.amount * amountToCraft then
+                idk = idk + 1
+                if idk == #materials then
+                    cb(true)
+                end
+            else
+                cb(false)
+                return
+            end
         end
     end
 end)

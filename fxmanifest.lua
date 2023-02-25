@@ -1,18 +1,20 @@
 fx_version 'cerulean'
 game 'gta5'
+lua54 'yes'
 
-description 'qw-crafting'
-version '0.1.0'
-author 'qwadebot'
 
-server_script {
+shared_scripts { 
+	'config.lua',
+}
+
+server_scripts {
 	'server/*.lua',
+	'@ox_lib/init.lua',
 }
 
 client_scripts { 
     'client/*.lua',
 }
-shared_scripts { 'config.lua' }
 
 ui_page 'html/index.html'
 
@@ -20,4 +22,3 @@ files {
 	'html/*.*',
 }
 
-lua54 'yes'

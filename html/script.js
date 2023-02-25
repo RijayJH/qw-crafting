@@ -1,5 +1,5 @@
 const Config = {
-  inventory: "qb-inventory", // Change this to your inventory resource name
+  inventory: "ox_inventory", // Change this to your inventory resource name
 };
 
 const $incButton = $("#inc-button");
@@ -45,7 +45,7 @@ $(function () {
   // if the person uses the escape key, it will exit the resource
   document.onkeyup = function (data) {
     if (data.which == 27) {
-      $.post("https://qw-crafting/exit", JSON.stringify({}));
+      $.post("https://qb-crafting/exit", JSON.stringify({}));
       $counter.val(1);
       $incButton.off("click");
       $decButton.off("click");
@@ -61,7 +61,7 @@ function craftItem(event) {
   const location = parent.querySelector("#craftable-item").dataset.location;
 
   $.post(
-    "https://qw-crafting/craft",
+    "https://qb-crafting/craft",
     JSON.stringify({
       item: item,
       location: location,
@@ -75,7 +75,7 @@ function craftItem(event) {
 }
 
 async function loadCraftingTable(tableName) {
-  const response = await fetch("https://qw-crafting/items", {
+  const response = await fetch("https://qb-crafting/items", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -130,10 +130,10 @@ async function loadCraftingTable(tableName) {
                       <div class="flex gap-2">
                           <img class="w-6 h-6" src='nui://${
                             Config.inventory
-                          }/html/images/${requiredItem.item}.png' alt="">
+                          }/web/images/${requiredItem.item}.png' alt="">
                           <div class="text-sm text-white" id='material-count' data-baseweight="${
                             requiredItem.amount
-                          }">${requiredItem.item}: ${
+                          }">${requiredItem.label}: ${
         requiredItem.amount.toString() * parseInt($counter.val())
       }</div>
                       </div>
