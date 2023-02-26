@@ -2,7 +2,7 @@ Config = {}
 
 Config.Inventory = 'ox_inventory' -- Change this to your inventory resource name
 
-Config.UsingSkills = false -- Using mz-skills
+Config.UsingSkills = false -- Using qw_skills
 
 Config.Debug = false -- Shows Zone debug and other debug related items
 
