@@ -11,19 +11,18 @@ RegisterNUICallback('items', function(data, cb)
             invenimage = Config.Inventory .. "/html/images/" .. QBCore.Shared.Items[k].image
         end
         if Config.UsingSkills then
-            exports['mz-skills']:CheckSkill("Crafting", v.skillRequired, function(hasskill)
-                if hasskill then
-                    itemList[#itemList + 1] = {
-                        name = v.name,
-                        image = invenimage,
-                        itemWeight = tonumber(QBCore.Shared.Items[k].weight) / 1000,
-                        craftableAmount = v.amount,
-                        itemsNeededToCraft = v.materialsNeeded,
-                        item = k,
-                        location = data.location
-                    }
-                end
-            end)
+            local hasskill = exports['qw_skills']:GetCurrentSkill('crafting')
+            if hasskill and hasskill.level >= v.skillRequired then
+                itemList[#itemList + 1] = {
+                    name = v.name,
+                    image = invenimage,
+                    itemWeight = tonumber(QBCore.Shared.Items[k].weight) / 1000,
+                    craftableAmount = v.amount,
+                    itemsNeededToCraft = v.materialsNeeded,
+                    item = k,
+                    location = data.location
+                }
+            end
         else
             itemList[#itemList + 1] = {
                 name = v.name,
@@ -61,7 +60,7 @@ RegisterNUICallback('craft', function(data)
                     local random = math.random(1, 100)
     
                     if base > random then
-                        exports["mz-skills"]:UpdateSkill("Crafting", 1)
+                        exports["qw_skills"]:UpdateSkill("crafting", 1)
                     end
                 end
             end, function() -- Cancel
