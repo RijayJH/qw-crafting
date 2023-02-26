@@ -56,11 +56,10 @@ RegisterNUICallback('craft', function(data)
                 TriggerServerEvent('qw-crafting:server:craftItem', data.item, data.location, data.amount)
                 TriggerEvent('animations:client:EmoteCommandStart', { "c" })
                 if Config.UsingSkills then 
-                    local base = math.random(1, 100)
                     local random = math.random(1, 100)
     
-                    if base > random then
-                        exports["qw_skills"]:UpdateSkill("crafting", 1)
+                    if random then
+                        exports["qw_skills"]:UpdateSkill("crafting", random)
                     end
                 end
             end, function() -- Cancel
