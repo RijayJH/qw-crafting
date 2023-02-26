@@ -18,14 +18,20 @@ RegisterNetEvent('qw-crafting:server:craftItem', function(item, location, amount
     -- end
 
     local itemData = Config.CraftingLocations[location].items[item]
-
+    local info = itemData.metadata or nil
     for k, v in pairs(itemData.materialsNeeded) do
         Player.Functions.RemoveItem(v.item, v.amount * amount)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v.item], 'remove', v.amount * amount)
     end
 
-    if exports.ox_inventory:CanCarryItem(src, item, itemData.amount * amount) then
-        exports.ox_inventory:AddItem(src, item, itemData.amount * amount)
+    if info then
+        if exports.ox_inventory:CanCarryItem(src, item, itemData.amount * amount) then
+            exports.ox_inventory:AddItem(src, item, itemData.amount * amount, info)
+        end
+    else
+        if exports.ox_inventory:CanCarryItem(src, item, itemData.amount * amount) then
+            exports.ox_inventory:AddItem(src, item, itemData.amount * amount)
+        end
     end
 
     if Config.DiscordLog.active then
