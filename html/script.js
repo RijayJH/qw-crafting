@@ -45,7 +45,7 @@ $(function () {
   // if the person uses the escape key, it will exit the resource
   document.onkeyup = function (data) {
     if (data.which == 27) {
-      $.post("https://qb-crafting/exit", JSON.stringify({}));
+      $.post("https://qw-crafting/exit", JSON.stringify({}));
       $counter.val(1);
       $incButton.off("click");
       $decButton.off("click");
@@ -61,7 +61,7 @@ function craftItem(event) {
   const location = parent.querySelector("#craftable-item").dataset.location;
 
   $.post(
-    "https://qb-crafting/craft",
+    "https://qw-crafting/craft",
     JSON.stringify({
       item: item,
       location: location,
@@ -75,7 +75,7 @@ function craftItem(event) {
 }
 
 async function loadCraftingTable(tableName) {
-  const response = await fetch("https://qb-crafting/items", {
+  const response = await fetch("https://qw-crafting/items", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
