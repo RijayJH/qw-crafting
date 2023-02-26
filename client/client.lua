@@ -59,7 +59,7 @@ RegisterNUICallback('craft', function(data)
                     local random = math.random(1, 100)
     
                     if random then
-                        exports["qw_skills"]:UpdateSkill("crafting", 1)
+                        exports["qw_skills"]:UpdateSkill("crafting", random)
                     end
                 end
             end, function() -- Cancel
